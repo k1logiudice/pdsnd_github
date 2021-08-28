@@ -2,7 +2,7 @@
 2021-08-28 (28 Aug 2021)
 
 ### Project Title
-🚲 _**Bike Share project**_
+🚲🌼 _**Bike Share project**_ 
 
 ### Description
 **Overview:**
@@ -70,3 +70,4 @@ The following resources were used as references when coding this program:
   6. https://www.python.org/dev/peps/pep-0008
   7. https://realpython.com/
   8. https://emojipedia.org/bicycle/
+  9. https://emojis.wiki/blossom/ for flower emoji
