@@ -69,3 +69,4 @@ The following resources were used as references when coding this program:
   5. GeeksForGeeks
   6. https://www.python.org/dev/peps/pep-0008
   7. https://realpython.com/
+  8. https://emojipedia.org/bicycle/
