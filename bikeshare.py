@@ -637,7 +637,7 @@ def user_stats(df, filters):
 
 def display_raw(df, len_df, num_rows):
     """
-    Displays raw data in sets of between 1 and 10 rows for each request.
+    Displays raw data in sets of between 1 and 25 rows for each request.
 
     Args:
         (df) df - Pandas DataFrame containing city data filtered by month & day
@@ -678,6 +678,8 @@ def get_raw(df):
     and if so, how many lines they want to see.
     Calls function to display the raw data N rows at a time if user
     responds in the affirmative, where N is taken from user input.
+    Validates user input. Default value is used  if a non-integer is provided
+    or if the value is less than 1 or greater than 25 (parameterized).
 
     Calls the following functions:
         display_raw - displays raw data N rows at a time.
@@ -691,8 +693,23 @@ def get_raw(df):
     see_raw = input("Would you like to see some lines of raw data? "
                     "\n<Enter 'y' for yes or 'n' for no:> ")
     if see_raw.lower()[0] == 'y':
-        num_rows = int(input("How many lines would you like to see? "
-                         "\n<Enter a number between 1 and 10:> "))
+        default_rows = 5
+        max_rows = 25  # parameterize max lines
+        try:
+            num_rows = int(input("How many lines would you like to see? "
+                                 "\n<Enter a number between 1 and {}:> "
+                                 .format(max_rows)))
+        except ValueError:
+            print("\nNon-integer provided. "
+                  "Defaulting to {} lines.".format(default_rows))
+            num_rows = default_rows
+        if 1 <= num_rows <= max_rows:
+            print("\nInteger {} is between 1 and {}. " 
+                  "Proceeding.".format(num_rows,max_rows))
+        else:
+            print("\nInteger not between 1 and {}. "
+                  "Defaulting to {} lines.\n".format(default_rows, max_rows))
+            num_rows = default_rows
         print("\nOK. Displaying {} lines of raw data . . .\n".format(num_rows))
         len_df = len(df)
         display_raw(df, len_df, num_rows)
