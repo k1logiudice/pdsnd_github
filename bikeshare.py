@@ -635,20 +635,21 @@ def user_stats(df, filters):
     print('='*79)
 
 
-def display_raw(df, len_df):
+def display_raw(df, len_df, num_rows):
     """
-    Displays raw data in sets of five rows for each request.
+    Displays raw data in sets of between 1 and 25 rows for each request.
 
     Args:
         (df) df - Pandas DataFrame containing city data filtered by month & day
         (int) len_df - length of the dataframe, i.e., the number of rows.
               Used to ensure the print of the raw data doesn't go beyond
               the end of file.
+        (int) num_rows - number of lines to display in each chunk
 
     Returns:
         Nothing returned. Raw data rows are printed to console.
     """
-    chunk_size = 5  # print 5 rows of raw data at a time
+    chunk_size = num_rows  # print num_rows rows of raw data at a time
     start_index = 0  # start at index 0
     see_more = 'y'
     while see_more.lower()[0] == 'y' and start_index < len_df:
@@ -660,7 +661,7 @@ def display_raw(df, len_df):
             start_index += 1
 
         if start_index < len_df:
-            see_more = input("\nWould you like to see 5 MORE lines raw data? "
+            see_more = input("\nWould you like to see MORE lines raw data? "
                              "\n<Enter 'y' for yes or 'n' for no:> ")
         else:
             print()
@@ -673,12 +674,15 @@ def display_raw(df, len_df):
 
 def get_raw(df):
     """
-    Asks user to choose whether or not they would like to view raw data.
-    Calls function to display the raw data 5 rows at a time if user
-    responds in the affirmative.
+    Asks user to choose whether or not they would like to view raw data,
+    and if so, how many lines they want to see.
+    Calls function to display the raw data N rows at a time if user
+    responds in the affirmative, where N is taken from user input.
+    Validates user input. Default value is used  if a non-integer is provided
+    or if the value is less than 1 or greater than 25 (parameterized).
 
     Calls the following functions:
-        display_raw - displays raw data 5 rows at a time.
+        display_raw - displays raw data N rows at a time.
 
     Args:
         (df) df - Pandas DataFrame containing city data filtered by month & day
@@ -686,12 +690,29 @@ def get_raw(df):
     Returns:
         Nothing returned. Raw data rows are printed to console.
     """
-    see_raw = input("Would you like to see 5 lines of raw data? "
+    see_raw = input("Would you like to see some lines of raw data? "
                     "\n<Enter 'y' for yes or 'n' for no:> ")
     if see_raw.lower()[0] == 'y':
-        print("\nOK. Displaying raw data . . .\n")
+        default_rows = 5
+        max_rows = 25  # parameterize max lines
+        try:
+            num_rows = int(input("How many lines would you like to see? "
+                                 "\n<Enter a number between 1 and {}:> "
+                                 .format(max_rows)))
+        except ValueError:
+            print("\nNon-integer provided. "
+                  "Defaulting to {} lines.".format(default_rows))
+            num_rows = default_rows
+        if 1 <= num_rows <= max_rows:
+            print("\nInteger {} is between 1 and {}. " 
+                  "Proceeding.".format(num_rows,max_rows))
+        else:
+            print("\nInteger not between 1 and {}. "
+                  "Defaulting to {} lines.\n".format(default_rows, max_rows))
+            num_rows = default_rows
+        print("\nOK. Displaying {} lines of raw data . . .\n".format(num_rows))
         len_df = len(df)
-        display_raw(df, len_df)
+        display_raw(df, len_df, num_rows)
     else:
         print("\nOK. NOT displaying raw data.\n")
 
